@@ -1,0 +1,43 @@
+body {
+    font-family: sans-serif;
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 0 16px
+}
+
+form,
+.card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 16px;
+    margin: 12px 0
+}
+
+input,
+button {
+    padding: 10px;
+    margin: 6px 0;
+    width: 100%
+}
+
+ul {
+    list-style: none;
+    padding: 0
+}
+
+li {
+    border-bottom: 1px solid #eee;
+    padding: 8px 0
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px
+}
+
+#status {
+    font-size: .9rem;
+    color: #444;
+    margin-top: 6px
+}
