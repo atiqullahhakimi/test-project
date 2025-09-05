@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Supabase + HTML/JS</title>
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
@@ -15,7 +14,10 @@
     <form id="authForm">
         <input id="email" type="email" placeholder="email@example.com" required />
         <input id="password" type="password" placeholder="Password" required />
+
+        <!-- حالا سه دکمه داریم: Sign Up / Sign In / Sign Out -->
         <div class="row">
+            <button type="button" id="signupBtn">Sign Up</button>
             <button type="button" id="signinBtn">Sign In</button>
             <button type="button" id="signoutBtn">Sign Out</button>
         </div>
@@ -28,7 +30,6 @@
         <input id="email2" type="email" placeholder="client email" required />
         <input id="age" type="number" min="0" max="120" placeholder="age (optional)" />
         <input id="phone" placeholder="phone (optional)" />
-        <!-- 👇 متن جای‌نما واضح شد: 7–12 رقم -->
         <input id="aNumber" placeholder="A-Number (A + 7–12 digits)" />
         <button type="submit">Add Record</button>
     </form>
@@ -37,7 +38,6 @@
         <button id="loadBtn">Load My List</button>
         <ul id="list"></ul>
     </div>
-
 
     <script type="module" src="app.js"></script>
 </body>
