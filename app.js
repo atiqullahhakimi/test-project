@@ -1,4 +1,3 @@
-
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 // 🟩 پروژه خودتان
@@ -14,14 +13,14 @@ async function refreshStatus() {
     return user;
 }
 
-// ✅ A-Number: اجازه 7 تا 12 رقم، خروجی استاندارد با A
+// ✅ A-Number normalizer
 function normalizeANumber(raw, min = 7, max = 12) {
     if (!raw) return null;
-    let v = raw.toUpperCase().trim().replace(/[^A0-9]/g, ''); // فقط A و رقم
-    if (v.startsWith('A')) v = v.slice(1);                    // A اول را بردار
-    v = v.replace(/\D/g, '');                                  // فقط رقم
-    if (v.length < min || v.length > max) return null;         // 7..12 رقم
-    return 'A' + v;                                            // ذخیره استاندارد
+    let v = raw.toUpperCase().trim().replace(/[^A0-9]/g, '');
+    if (v.startsWith('A')) v = v.slice(1);
+    v = v.replace(/\D/g, '');
+    if (v.length < min || v.length > max) return null;
+    return 'A' + v;
 }
 
 function requireAuth(user) {
@@ -29,14 +28,43 @@ function requireAuth(user) {
 }
 
 // ---- AUTH ----
+
+// (جدید) Sign Up: ساخت حساب کاربری جدید
+document.getElementById("signupBtn").onclick = async () => {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        // آدرس برگشت بعد از تأیید ایمیل — باید در Supabase مجاز باشد
+        options: { emailRedirectTo: "https://atiqullahhakimi.github.io/" }
+    });
+
+    if (error) {
+        alert("SignUp error: " + error.message);
+        return;
+    }
+
+    // در حالت پیش‌فرض، تا ایمیل تأیید نشود session ایجاد نمی‌شود.
+    if (!data?.session) {
+        alert("Signup successful. لطفاً ایمیل‌تان را تأیید کنید، سپس با Sign In وارد شوید.");
+    } else {
+        alert("Signed up & signed in.");
+    }
+    await refreshStatus();
+};
+
+// ورود
 document.getElementById("signinBtn").onclick = async () => {
-    const email = document.getElementById("email").value;
+    const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) alert(error.message);
     await refreshStatus();
 };
 
+// خروج
 document.getElementById("signoutBtn").onclick = async () => {
     await supabase.auth.signOut();
     await refreshStatus();
@@ -51,7 +79,7 @@ document.getElementById("addClientForm").onsubmit = async (e) => {
         requireAuth(user);
 
         const aRaw = document.getElementById("aNumber").value;
-        const aNorm = normalizeANumber(aRaw, 7, 12); // 👈 هماهنگ با DB
+        const aNorm = normalizeANumber(aRaw, 7, 12);
         if (aRaw && !aNorm) {
             alert("Invalid A-Number. Use A + 7–12 digits.");
             return;
@@ -66,7 +94,6 @@ document.getElementById("addClientForm").onsubmit = async (e) => {
             a_number: aNorm || null
         };
 
-        console.log("INSERT payload:", payload);
         const { error } = await supabase.from("clients").insert(payload);
         if (error) { console.error(error); alert(error.message); return; }
 
