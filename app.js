@@ -1,6 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-// 🟩 پروژه خودتان
+// 🟩 Your project
 const SUPABASE_URL = "https://nunewaqgfniuzesbnjol.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51bmV3YXFnZm5pdXplc2Juam9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU4OTAwNzYsImV4cCI6MjA3MTQ2NjA3Nn0.9qhDTlVwsQGIOYuZVt6BrDt2YpR2DoJU44UCN2myrwg";
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -24,12 +24,12 @@ function normalizeANumber(raw, min = 7, max = 12) {
 }
 
 function requireAuth(user) {
-    if (!user) { alert("اول وارد حساب شوید (Sign In)."); throw new Error("not-authenticated"); }
+    if (!user) { alert("Please sign in first (Sign In)."); throw new Error("not-authenticated"); }
 }
 
 // ---- AUTH ----
 
-// (جدید) Sign Up: ساخت حساب کاربری جدید
+// (New) Sign Up: create a new user account
 document.getElementById("signupBtn").onclick = async () => {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
@@ -37,7 +37,7 @@ document.getElementById("signupBtn").onclick = async () => {
     const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        // آدرس برگشت بعد از تأیید ایمیل — باید در Supabase مجاز باشد
+        // Redirect URL after email confirmation — must be allowed in Supabase
         options: { emailRedirectTo: "https://atiqullahhakimi.github.io/" }
     });
 
@@ -46,16 +46,16 @@ document.getElementById("signupBtn").onclick = async () => {
         return;
     }
 
-    // در حالت پیش‌فرض، تا ایمیل تأیید نشود session ایجاد نمی‌شود.
+    // By default, no session is created until the email is confirmed.
     if (!data?.session) {
-        alert("Signup successful. لطفاً ایمیل‌تان را تأیید کنید، سپس با Sign In وارد شوید.");
+        alert("Signup successful. Please confirm your email, then Sign In.");
     } else {
         alert("Signed up & signed in.");
     }
     await refreshStatus();
 };
 
-// ورود
+// Sign In
 document.getElementById("signinBtn").onclick = async () => {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
@@ -64,7 +64,7 @@ document.getElementById("signinBtn").onclick = async () => {
     await refreshStatus();
 };
 
-// خروج
+// Sign Out
 document.getElementById("signoutBtn").onclick = async () => {
     await supabase.auth.signOut();
     await refreshStatus();
@@ -127,3 +127,4 @@ document.getElementById("loadBtn").onclick = async () => {
 
 // init
 await refreshStatus();
+
